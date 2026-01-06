@@ -29,7 +29,7 @@ If you prefer to run this on your own machine:
 
 **1. Clone the repository**
 ```bash
-git clone [https://github.com/yourusername/pdf-intelligent-tool.git](https://github.com/kostislitsios/pdf-intelligent-tool.git)
+git clone [https://github.com/yourusername/pdf-intelligence-tool.git](https://github.com/kostislitsios/pdf-intelligence-tool.git)
 cd ai-smart-document-analyst
 ```
 **2. Install dependencies**
