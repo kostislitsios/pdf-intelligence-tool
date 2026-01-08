@@ -4,70 +4,103 @@ from langchain.text_splitter import CharacterTextSplitter
 from langchain_openai import OpenAIEmbeddings, OpenAI
 from langchain_community.vectorstores import FAISS
 from langchain.chains.question_answering import load_qa_chain
-import os
 
-# 1. Page Setup
-st.set_page_config(page_title="Ask your PDF", page_icon="📄")
-st.header("📄 OpenRouter AI Analyst: Chat with your PDF")
+# --------------------------------------------------
+# Page setup
+# --------------------------------------------------
+st.set_page_config(page_title="Chat with PDFs", page_icon="📄")
+st.header("📄 Multi-PDF AI Analyst (OpenRouter)")
 
-# 2. Sidebar for API Key (Security Best Practice)
+# --------------------------------------------------
+# Load OpenRouter API key (shared for all users)
+# --------------------------------------------------
+api_key = st.secrets["OPENROUTER_API_KEY"]
+
+# --------------------------------------------------
+# Sidebar
+# --------------------------------------------------
 with st.sidebar:
     st.subheader("Configuration")
-    api_key = st.text_input("Enter your OpenRouter API Key:", type="password",
-                           help="Your key is not stored in our server. It is used only for this session and is discarded when you close the tab.",
-                           placeholder="sk-...")
+
+    model_name = st.selectbox(
+        "Choose a free model",
+        [
+            "meta-llama/llama-3.3-70b-instruct:free",
+            "qwen/qwen-3-235b-a22b:free",
+            "mistralai/devstral-2512:free",
+        ]
+    )
 
     st.markdown("---")
-    st.write("Upload your PDF and ask questions about its content.")
+    st.write("Upload one or more PDFs and ask questions about them.")
 
-# 3. File Uploader
-pdf = st.file_uploader("Upload your PDF here", type="pdf")
+# --------------------------------------------------
+# File uploader (multiple PDFs)
+# --------------------------------------------------
+pdfs = st.file_uploader(
+    "Upload PDF files",
+    type="pdf",
+    accept_multiple_files=True
+)
 
-# 4. Main Logic
-if pdf is not None and api_key:
-    pdf_reader = PdfReader(pdf)
-    text = ""
+# --------------------------------------------------
+# Build knowledge base (cached)
+# --------------------------------------------------
+@st.cache_resource(show_spinner="Indexing PDFs...")
+def build_knowledge_base(chunks):
+    embeddings = OpenAIEmbeddings(
+        openai_api_key=api_key,
+        openai_api_base="https://openrouter.ai/api/v1",
+        model="text-embedding-3-small"
+    )
+    return FAISS.from_texts(chunks, embeddings)
 
-    for page in pdf_reader.pages:
-        extracted = page.extract_text()
-        if extracted:
-            text += extracted
-        
-    # Split text into chunks (AI can't read whole books at once)
-    text_splitter = CharacterTextSplitter(
+# --------------------------------------------------
+# Main logic
+# --------------------------------------------------
+if pdfs:
+    full_text = ""
+
+    for pdf in pdfs:
+        reader = PdfReader(pdf)
+        for page in reader.pages:
+            text = page.extract_text()
+            if text:
+                full_text += text + "\n"
+
+    if not full_text.strip():
+        st.error("No readable text found in the uploaded PDFs.")
+        st.stop()
+
+    splitter = CharacterTextSplitter(
         separator="\n",
         chunk_size=1000,
         chunk_overlap=200,
         length_function=len
     )
 
-    chunks = text_splitter.split_text(text)
-    
-    # Create Embeddings (The "Brain")
-    embeddings = OpenAIEmbeddings(
-        openai_api_key=api_key
-    )
+    chunks = splitter.split_text(full_text)
 
-    knowledge_base = FAISS.from_texts(chunks, embeddings)
-    
-    # 5. User Question Input
-    user_question = st.text_input("Ask a question about your PDF:")
-    
-    if user_question:
-        docs = knowledge_base.similarity_search(user_question)
+    knowledge_base = build_knowledge_base(chunks)
+
+    question = st.text_input("Ask a question about your PDFs:")
+
+    if question:
+        docs = knowledge_base.similarity_search(question, k=4)
 
         llm = OpenAI(
             openai_api_key=api_key,
+            openai_api_base="https://openrouter.ai/api/v1",
+            model_name=model_name,
             temperature=0
         )
 
         chain = load_qa_chain(llm, chain_type="stuff")
-        response = chain.run(
-            input_documents=docs,
-            question=user_question
-        )
 
-        st.success(response)
+        with st.spinner("Thinking..."):
+            answer = chain.run(
+                input_documents=docs,
+                question=question
+            )
 
-elif pdf and not api_key:
-    st.warning("Please enter your OpenAI API key in the sidebar to proceed.")
+        st.success(answer)
