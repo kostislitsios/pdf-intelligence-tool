@@ -10,7 +10,7 @@ from langchain.chains.question_answering import load_qa_chain
 # Page setup
 # --------------------------------------------------
 st.set_page_config(page_title="Chat with PDFs", page_icon="📄")
-st.header("📄 Multi-PDF AI Analyst (100% Free)")
+st.header("📄 PDF AI Analyst ")
 
 # --------------------------------------------------
 # Shared OpenRouter API key (only key needed)
