@@ -17,7 +17,7 @@ with st.sidebar:
     if api_key:
         os.environ["OPENAI_API_KEY"] = api_key
     st.markdown("---")
-    st.write("This tool allows you to upload a PDF and ask questions about its content.")
+    st.write("Upload your PDF and ask questions about its content.")
 
 # 3. File Uploader
 pdf = st.file_uploader("Upload your PDF here", type="pdf")
