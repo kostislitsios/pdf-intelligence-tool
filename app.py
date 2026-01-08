@@ -14,8 +14,7 @@ st.header("📄 AI Analyst: Chat with your PDF")
 with st.sidebar:
     st.subheader("Configuration")
     api_key = st.text_input("Enter OpenAI API Key:", type="password")
-    if api_key:
-        os.environ["OPENAI_API_KEY"] = api_key
+
     st.markdown("---")
     st.write("Upload your PDF and ask questions about its content.")
 
@@ -26,8 +25,11 @@ pdf = st.file_uploader("Upload your PDF here", type="pdf")
 if pdf is not None and api_key:
     pdf_reader = PdfReader(pdf)
     text = ""
+
     for page in pdf_reader.pages:
-        text += page.extract_text()
+        extracted = page.extract_text()
+        if extracted:
+            text += extracted
         
     # Split text into chunks (AI can't read whole books at once)
     text_splitter = CharacterTextSplitter(
@@ -36,10 +38,14 @@ if pdf is not None and api_key:
         chunk_overlap=200,
         length_function=len
     )
+
     chunks = text_splitter.split_text(text)
     
     # Create Embeddings (The "Brain")
-    embeddings = OpenAIEmbeddings()
+    embeddings = OpenAIEmbeddings(
+        openai_api_key=api_key
+    )
+
     knowledge_base = FAISS.from_texts(chunks, embeddings)
     
     # 5. User Question Input
@@ -47,10 +53,18 @@ if pdf is not None and api_key:
     
     if user_question:
         docs = knowledge_base.similarity_search(user_question)
-        llm = OpenAI()
+
+        llm = OpenAI(
+            openai_api_key=api_key,
+            temperature=0
+        )
+
         chain = load_qa_chain(llm, chain_type="stuff")
-        response = chain.run(input_documents=docs, question=user_question)
-        
+        response = chain.run(
+            input_documents=docs,
+            question=user_question
+        )
+
         st.success(response)
 
 elif pdf and not api_key:
