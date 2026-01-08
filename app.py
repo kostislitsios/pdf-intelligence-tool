@@ -8,7 +8,7 @@ import os
 
 # 1. Page Setup
 st.set_page_config(page_title="Ask your PDF", page_icon="📄")
-st.header("📄 AI Analyst: Chat with your PDF")
+st.header("📄 OpenRouter AI Analyst: Chat with your PDF")
 
 # 2. Sidebar for API Key (Security Best Practice)
 with st.sidebar:
