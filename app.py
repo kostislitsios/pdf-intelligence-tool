@@ -12,7 +12,7 @@ st.set_page_config(page_title="Chat with PDFs", page_icon="📄")
 st.header("📄 Multi-PDF AI Analyst (OpenRouter)")
 
 # --------------------------------------------------
-# Load OpenRouter API key (shared for all users)
+# Shared OpenRouter API key
 # --------------------------------------------------
 api_key = st.secrets["OPENROUTER_API_KEY"]
 
@@ -35,7 +35,7 @@ with st.sidebar:
     st.write("Upload one or more PDFs and ask questions about them.")
 
 # --------------------------------------------------
-# File uploader (multiple PDFs)
+# File uploader
 # --------------------------------------------------
 pdfs = st.file_uploader(
     "Upload PDF files",
@@ -50,7 +50,7 @@ pdfs = st.file_uploader(
 def build_knowledge_base(chunks):
     embeddings = OpenAIEmbeddings(
         openai_api_key=api_key,
-        openai_api_base="https://openrouter.ai/api/v1",
+        base_url="https://openrouter.ai/api/v1",  # ✅ FIX
         model="text-embedding-3-small"
     )
     return FAISS.from_texts(chunks, embeddings)
@@ -90,7 +90,7 @@ if pdfs:
 
         llm = OpenAI(
             openai_api_key=api_key,
-            openai_api_base="https://openrouter.ai/api/v1",
+            base_url="https://openrouter.ai/api/v1",  # ✅ FIX
             model_name=model_name,
             temperature=0
         )
