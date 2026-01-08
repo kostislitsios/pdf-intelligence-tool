@@ -1,7 +1,8 @@
 import streamlit as st
 from PyPDF2 import PdfReader
 from langchain.text_splitter import CharacterTextSplitter
-from langchain_openai import OpenAIEmbeddings, OpenAI
+from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_openai import OpenAI
 from langchain_community.vectorstores import FAISS
 from langchain.chains.question_answering import load_qa_chain
 
@@ -9,12 +10,12 @@ from langchain.chains.question_answering import load_qa_chain
 # Page setup
 # --------------------------------------------------
 st.set_page_config(page_title="Chat with PDFs", page_icon="📄")
-st.header("📄 Multi-PDF AI Analyst (OpenRouter)")
+st.header("📄 Multi-PDF AI Analyst (100% Free)")
 
 # --------------------------------------------------
-# Shared OpenRouter API key
+# Shared OpenRouter API key (only key needed)
 # --------------------------------------------------
-api_key = st.secrets["OPENROUTER_API_KEY"]
+OPENROUTER_API_KEY = st.secrets["OPENROUTER_API_KEY"]
 
 # --------------------------------------------------
 # Sidebar
@@ -32,7 +33,7 @@ with st.sidebar:
     )
 
     st.markdown("---")
-    st.write("Upload one or more PDFs and ask questions about them.")
+    st.write("Upload PDFs and ask questions.")
 
 # --------------------------------------------------
 # File uploader
@@ -44,14 +45,12 @@ pdfs = st.file_uploader(
 )
 
 # --------------------------------------------------
-# Build knowledge base (cached)
+# Build knowledge base (LOCAL embeddings)
 # --------------------------------------------------
 @st.cache_resource(show_spinner="Indexing PDFs...")
 def build_knowledge_base(chunks):
-    embeddings = OpenAIEmbeddings(
-        openai_api_key=api_key,
-        base_url="https://openrouter.ai/api/v1",  # ✅ FIX
-        model="text-embedding-3-small"
+    embeddings = HuggingFaceEmbeddings(
+        model_name="sentence-transformers/all-MiniLM-L6-v2"
     )
     return FAISS.from_texts(chunks, embeddings)
 
@@ -73,14 +72,11 @@ if pdfs:
         st.stop()
 
     splitter = CharacterTextSplitter(
-        separator="\n",
         chunk_size=1000,
-        chunk_overlap=200,
-        length_function=len
+        chunk_overlap=200
     )
 
     chunks = splitter.split_text(full_text)
-
     knowledge_base = build_knowledge_base(chunks)
 
     question = st.text_input("Ask a question about your PDFs:")
@@ -89,9 +85,13 @@ if pdfs:
         docs = knowledge_base.similarity_search(question, k=4)
 
         llm = OpenAI(
-            openai_api_key=api_key,
-            base_url="https://openrouter.ai/api/v1",  # ✅ FIX
+            openai_api_key=OPENROUTER_API_KEY,
+            base_url="https://openrouter.ai/api/v1",
             model_name=model_name,
+            default_headers={
+                "HTTP-Referer": "https://your-app-name.streamlit.app",
+                "X-Title": "Multi-PDF AI Analyst"
+            },
             temperature=0
         )
 
