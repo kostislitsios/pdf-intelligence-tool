@@ -13,7 +13,9 @@ st.header("📄 OpenRouter AI Analyst: Chat with your PDF")
 # 2. Sidebar for API Key (Security Best Practice)
 with st.sidebar:
     st.subheader("Configuration")
-    api_key = st.text_input("Enter your OpenRouter API Key:", type="password")
+    api_key = st.text_input("Enter your OpenRouter API Key:", type="password",
+                           help="Your key is not stored in our server. It is used only for this session and is discarded when you close the tab.",
+                           placeholder="sk-...")
 
     st.markdown("---")
     st.write("Upload your PDF and ask questions about its content.")
