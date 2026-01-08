@@ -13,7 +13,7 @@ st.header("📄 AI Analyst: Chat with your PDF")
 # 2. Sidebar for API Key (Security Best Practice)
 with st.sidebar:
     st.subheader("Configuration")
-    api_key = st.text_input("Enter OpenAI API Key:", type="password")
+    api_key = st.text_input("Enter your OpenRouter API Key:", type="password")
 
     st.markdown("---")
     st.write("Upload your PDF and ask questions about its content.")
