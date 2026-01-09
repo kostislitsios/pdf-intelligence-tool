@@ -1,18 +1,22 @@
 import streamlit as st
 from PyPDF2 import PdfReader
+
 from langchain_text_splitters import CharacterTextSplitter
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
-from langchain.chains.question_answering import load_qa_chain
+
+from langchain_openai import ChatOpenAI
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import StrOutputParser
 
 # --------------------------------------------------
 # Page setup
 # --------------------------------------------------
-st.set_page_config(page_title="Chat with PDFs", page_icon="📄")
-st.header("📄 PDF AI Analyst ")
+st.set_page_config(page_title="PDF AI Analyst", page_icon="📄")
+st.header("📄 PDF AI Analyst")
 
 # --------------------------------------------------
-# Shared OpenRouter API key (only key needed)
+# API Key
 # --------------------------------------------------
 OPENROUTER_API_KEY = st.secrets["OPENROUTER_API_KEY"]
 
@@ -23,7 +27,7 @@ with st.sidebar:
     st.subheader("Configuration")
 
     model_name = st.selectbox(
-        "Select your model",
+        "Select model",
         [
             "meta-llama/llama-3.3-70b-instruct:free",
             "qwen/qwen-3-235b-a22b:free",
@@ -32,7 +36,7 @@ with st.sidebar:
     )
 
     st.markdown("---")
-    st.write("Upload PDFs and ask questions.")
+    st.caption("Upload PDFs and ask questions")
 
 # --------------------------------------------------
 # File uploader
@@ -44,10 +48,10 @@ pdfs = st.file_uploader(
 )
 
 # --------------------------------------------------
-# Build knowledge base (LOCAL embeddings)
+# Build vector store
 # --------------------------------------------------
 @st.cache_resource(show_spinner="Indexing PDFs...")
-def build_knowledge_base(chunks):
+def build_vectorstore(chunks):
     embeddings = HuggingFaceEmbeddings(
         model_name="sentence-transformers/all-MiniLM-L6-v2"
     )
@@ -76,30 +80,55 @@ if pdfs:
     )
 
     chunks = splitter.split_text(full_text)
-    knowledge_base = build_knowledge_base(chunks)
+    vectorstore = build_vectorstore(chunks)
 
     question = st.text_input("Ask a question about your PDFs:")
 
     if question:
-        docs = knowledge_base.similarity_search(question, k=4)
+        # 🔍 Retrieve relevant chunks
+        docs = vectorstore.similarity_search(question, k=4)
+        context = "\n\n".join(doc.page_content for doc in docs)
 
-        llm = OpenAI(
-            openai_api_key=OPENROUTER_API_KEY,
+        # 🤖 LLM (OpenRouter via OpenAI-compatible API)
+        llm = ChatOpenAI(
+            api_key=OPENROUTER_API_KEY,
             base_url="https://openrouter.ai/api/v1",
-            model_name=model_name,
+            model=model_name,
+            temperature=0,
             default_headers={
                 "HTTP-Referer": "https://your-app-name.streamlit.app",
-                "X-Title": "Multi-PDF AI Analyst"
+                "X-Title": "PDF AI Analyst"
             },
-            temperature=0
         )
 
-        chain = load_qa_chain(llm, chain_type="stuff")
+        # 🧾 Prompt
+        prompt = ChatPromptTemplate.from_template(
+            """
+You are an expert AI analyst.
+Answer the question ONLY using the context below.
+If the answer is not in the context, say you don't know.
+
+Context:
+{context}
+
+Question:
+{question}
+"""
+        )
+
+        # 🔗 LCEL chain
+        chain = (
+            prompt
+            | llm
+            | StrOutputParser()
+        )
 
         with st.spinner("Thinking..."):
-            answer = chain.run(
-                input_documents=docs,
-                question=question
+            answer = chain.invoke(
+                {
+                    "context": context,
+                    "question": question,
+                }
             )
 
         st.success(answer)
