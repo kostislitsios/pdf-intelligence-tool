@@ -6,6 +6,6 @@ langchain-community==0.0.38
 
 faiss-cpu==1.7.4
 
-sentence-transformers==2.5.1
+sentence-transformers
 torch==2.2.1
 transformers==4.33.2
