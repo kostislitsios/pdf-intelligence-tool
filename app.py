@@ -23,7 +23,7 @@ with st.sidebar:
     st.subheader("Configuration")
 
     model_name = st.selectbox(
-        "Choose a free model",
+        "Select your model",
         [
             "meta-llama/llama-3.3-70b-instruct:free",
             "qwen/qwen-3-235b-a22b:free",
