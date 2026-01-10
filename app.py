@@ -18,15 +18,16 @@ st.set_page_config(page_title="PDF AI Analyst", page_icon="📄")
 st.markdown(
     """
     <style>
-    .upload-box {
-        border: 2px dashed #999;
-        border-radius: 12px;
-        padding: 80px 20px;
-        text-align: center;
-        font-size: 1.1rem;
-        color: #666;
-        margin-top: 20px;
-        margin-bottom: 20px;
+    /* Target the internal section of the file uploader */
+    [data-testid='stFileUploader'] section {
+        min-height: 300px; /* CHANGE THIS VALUE to adjust height */
+        padding-top: 60px; /* Optional: Adjusts text position */
+        padding-bottom: 60px;
+    }
+    
+    /* Optional: Make the icon and text larger to match the new size */
+    [data-testid='stFileUploader'] section > div {
+        transform: scale(1.2); 
     }
     .css-1r6slb0.e1fqkh3o3 {
         min-width: 280px !important;
@@ -38,15 +39,6 @@ st.markdown(
 )
 
 st.header("📄 PDF AI Analyst")
-
-st.markdown(
-    """
-    <div class="upload-box">
-        📄 Drag and drop your files here<br>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
 
 # --------------------------------------------------
 # API Key
@@ -75,7 +67,7 @@ with st.sidebar:
 # File uploader
 # --------------------------------------------------
 pdfs = st.file_uploader(
-    "Hello",
+    "",
     type="pdf",
     accept_multiple_files=True
 )
