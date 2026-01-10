@@ -28,7 +28,7 @@ st.header("📄 PDF AI Analyst (Multi-Provider)")
 # Sidebar: Model & Key Management
 # --------------------------------------------------
 with st.sidebar:
-    st.subheader("1. Choose Your Model")
+    st.subheader("1. Select Your Model")
     
     # Map friendly names to (Provider_ID, Official_Model_Name)
     model_options = {
