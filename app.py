@@ -19,8 +19,8 @@ st.markdown("""
         padding: 40px;
     }
     .stSidebar {
-        min-width: 200px;
-        max-width: 200px;
+        min-width: 400px;
+        max-width: 400px;
     }
     </style>
 """, unsafe_allow_html=True)
