@@ -90,7 +90,6 @@ if pdfs:
     
     if chunks:
         vectorstore = build_vectorstore(chunks)
-        st.success(f"Processed {len(chunks)} chunks from {len(pdfs)} file(s).")
         
         question = st.text_input("Ask a question about your PDFs:")
 
