@@ -36,17 +36,16 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+st.header("📄 PDF AI Analyst")
+
 st.markdown(
     """
     <div class="upload-box">
-        📄 Drag & drop PDFs here<br>
-        <small>(or click below)</small>
+        📄 Drag & drop your PDFs<br>
     </div>
     """,
     unsafe_allow_html=True
 )
-
-st.header("📄 PDF AI Analyst")
 
 # --------------------------------------------------
 # API Key
