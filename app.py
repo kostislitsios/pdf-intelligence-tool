@@ -13,6 +13,27 @@ from langchain_core.output_parsers import StrOutputParser
 # Page setup
 # --------------------------------------------------
 st.set_page_config(page_title="PDF AI Analyst", page_icon="📄")
+
+# Expand upload area & sidebar
+st.markdown(
+    """
+    <style>
+    .stFileUploader {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    .css-1ixckvq {
+        width: 100% !important;
+    }
+    .css-1r6slb0.e1fqkh3o3 {
+        min-width: 280px !important;
+        max-width: 280px !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 st.header("📄 PDF AI Analyst")
 
 # --------------------------------------------------
