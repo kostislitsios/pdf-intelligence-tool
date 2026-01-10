@@ -20,7 +20,7 @@ st.markdown(
     <style>
     /* Target the internal section of the file uploader */
     [data-testid='stFileUploader'] section {
-        min-height: 230px; /* CHANGE THIS VALUE to adjust height */
+        min-height: 180px; /* CHANGE THIS VALUE to adjust height */
         padding-top: 60px; /* Optional: Adjusts text position */
         padding-bottom: 60px;
     }
