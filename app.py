@@ -30,7 +30,7 @@ with st.sidebar:
         "Select model",
         [
             "meta-llama/llama-3.3-70b-instruct:free",
-            "qwen/qwen2.5-72b-instruct:free",
+            "google/gemini-2.0-flash-exp:free",
             "mistralai/devstral-2512:free",
         ]
     )
