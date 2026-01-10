@@ -18,10 +18,11 @@ st.markdown("""
         min-height: 200px;
         padding: 40px;
     }
+    /*
     .stSidebar {
         min-width: 270px;
         max-width: 270px;
-    }
+    } */
     </style>
 """, unsafe_allow_html=True)
 
