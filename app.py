@@ -18,7 +18,7 @@ st.markdown("""
         min-height: 200px;
         padding: 40px;
     }
-    .stSidebar { min-width: 300px; }
+    .stSidebar { min-width: 200px; }
     </style>
 """, unsafe_allow_html=True)
 
@@ -28,7 +28,7 @@ st.header("📄 PDF AI Analyst (Multi-Provider)")
 # Sidebar: Model & Key Management
 # --------------------------------------------------
 with st.sidebar:
-    st.subheader("1. Choose Your Free Model")
+    st.subheader("1. Choose Your Model")
     
     # Map friendly names to (Provider_ID, Official_Model_Name)
     model_options = {
@@ -39,25 +39,19 @@ with st.sidebar:
     
     selected_label = st.selectbox("Select Model", list(model_options.keys()))
     provider, model_name = model_options[selected_label]
-
-    st.markdown("---")
-    st.subheader(f"2. Enter {provider.capitalize()} Key")
     
     # Dynamic Input for the specific key
     if provider == "groq":
-        st.caption("Get key: [console.groq.com](https://console.groq.com/keys)")
-        api_key = st.text_input("Groq API Key", type="password", key="groq_key")
+        api_key = st.secrets["GROQ_API_KEY"]
         base_url = "https://api.groq.com/openai/v1"
         
     elif provider == "google":
-        st.caption("Get key: [aistudio.google.com](https://aistudio.google.com/app/apikey)")
-        api_key = st.text_input("Google API Key", type="password", key="google_key")
-        # Google's OpenAI-compatible endpoint
-        base_url = "https://generativelanguage.googleapis.com/v1beta/openai/"
+        api_key = st.secrets["GOOGLE_API_KEY"]
+        base_url = "https://generativelanguage.googleapis.com/v1beta/openai"
         
     elif provider == "mistral":
         st.caption("Get key: [console.mistral.ai](https://console.mistral.ai/api-keys/)")
-        api_key = st.text_input("Mistral API Key", type="password", key="mistral_key")
+        api_key = st.secrets["MISTRAL_API_KEY"]
         base_url = "https://api.mistral.ai/v1"
 
     # st.markdown("---")
