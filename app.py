@@ -50,7 +50,6 @@ with st.sidebar:
         base_url = "https://generativelanguage.googleapis.com/v1beta/openai"
         
     elif provider == "mistral":
-        st.caption("Get key: [console.mistral.ai](https://console.mistral.ai/api-keys/)")
         api_key = st.secrets["MISTRAL_API_KEY"]
         base_url = "https://api.mistral.ai/v1"
 
