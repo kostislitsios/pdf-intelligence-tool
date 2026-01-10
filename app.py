@@ -18,18 +18,30 @@ st.set_page_config(page_title="PDF AI Analyst", page_icon="📄")
 st.markdown(
     """
     <style>
-    .stFileUploader {
-        width: 100% !important;
-        max-width: 100% !important;
-    }
-    .css-1ixckvq {
-        width: 100% !important;
+    .upload-box {
+        border: 2px dashed #999;
+        border-radius: 12px;
+        padding: 80px 20px;
+        text-align: center;
+        font-size: 1.1rem;
+        color: #666;
+        margin-bottom: 20px;
     }
     .css-1r6slb0.e1fqkh3o3 {
         min-width: 280px !important;
         max-width: 280px !important;
     }
     </style>
+    """,
+    unsafe_allow_html=True
+)
+
+st.markdown(
+    """
+    <div class="upload-box">
+        📄 Drag & drop PDFs here<br>
+        <small>(or click below)</small>
+    </div>
     """,
     unsafe_allow_html=True
 )
@@ -63,7 +75,7 @@ with st.sidebar:
 # File uploader
 # --------------------------------------------------
 pdfs = st.file_uploader(
-    "Upload PDF files",
+    "",
     type="pdf",
     accept_multiple_files=True
 )
