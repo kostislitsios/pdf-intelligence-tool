@@ -34,7 +34,7 @@ with st.sidebar:
     model_options = {
         "Llama 3.3 70B (Groq)": ("groq", "llama-3.3-70b-versatile"),
         "Gemini 2.0 Flash (Google)": ("google", "gemini-2.0-flash-exp"),
-        "Codestral/Mistral (Mistral)": ("mistral", "codestral-latest"), # Replaces Devstral
+        "Codestral (Mistral)": ("mistral", "codestral-latest"), # Replaces Devstral
     }
     
     selected_label = st.selectbox("Select Model", list(model_options.keys()))
