@@ -18,7 +18,10 @@ st.markdown("""
         min-height: 200px;
         padding: 40px;
     }
-    .stSidebar { max-width: 200px; }
+    .stSidebar {
+        min-width: 200px;
+        max-width: 200px;
+    }
     </style>
 """, unsafe_allow_html=True)
 
