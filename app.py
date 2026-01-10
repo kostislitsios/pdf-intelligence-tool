@@ -25,10 +25,10 @@ st.markdown(
         padding-bottom: 60px;
     }
     
-    /* Optional: Make the icon and text larger to match the new size */
+    /* Optional: Make the icon and text larger to match the new size
     [data-testid='stFileUploader'] section > div {
         transform: scale(1.2); 
-    }
+    } */
     .css-1r6slb0.e1fqkh3o3 {
         min-width: 280px !important;
         max-width: 280px !important;
