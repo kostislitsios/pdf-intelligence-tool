@@ -36,9 +36,9 @@ with st.sidebar:
     
     # Map friendly names to (Provider_ID, Official_Model_Name)
     model_options = {
-        "Llama 3.3 70B (Groq)": ("groq", "llama-3.3-70b-versatile"),
-        "Gemini 2.0 Flash (Google)": ("google", "gemini-2.0-flash-exp"),
-        "Codestral (Mistral)": ("mistral", "codestral-latest"), # Replaces Devstral
+        "Meta Llama 3.3 70B": ("groq", "llama-3.3-70b-versatile"),
+        "Google Gemini 2.0 Flash": ("google", "gemini-2.0-flash-exp"),
+        "Mistral Codestral": ("mistral", "codestral-latest"), # Replaces Devstral
     }
     
     selected_label = st.selectbox("Select Model", list(model_options.keys()))
