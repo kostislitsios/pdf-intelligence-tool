@@ -42,7 +42,7 @@ st.header("📄 PDF AI Analyst")
 st.markdown(
     """
     <div class="upload-box">
-        📄 Drag & drop your PDFs<br>
+        📄 Drag and drop your files here<br>
     </div>
     """,
     unsafe_allow_html=True
@@ -63,6 +63,7 @@ with st.sidebar:
         "Select model",
         [
             "meta-llama/llama-3.3-70b-instruct:free",
+            "google/gemini-2.5-flash-lite-preview",
             "mistralai/devstral-2512:free",
         ]
     )
@@ -74,7 +75,7 @@ with st.sidebar:
 # File uploader
 # --------------------------------------------------
 pdfs = st.file_uploader(
-    "",
+    "Hello",
     type="pdf",
     accept_multiple_files=True
 )
