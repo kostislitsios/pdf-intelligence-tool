@@ -10,7 +10,7 @@ from langchain_core.output_parsers import StrOutputParser
 # --------------------------------------------------
 # Page Config & CSS
 # --------------------------------------------------
-st.set_page_config(page_title="PDF AI Analyst", page_icon="📄")
+st.set_page_config(page_title="PDF AI Analysis", page_icon="📄")
 
 st.markdown("""
     <style>
