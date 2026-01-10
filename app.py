@@ -25,6 +25,7 @@ st.markdown(
         text-align: center;
         font-size: 1.1rem;
         color: #666;
+        margin-top: 20px;
         margin-bottom: 20px;
     }
     .css-1r6slb0.e1fqkh3o3 {
@@ -62,7 +63,6 @@ with st.sidebar:
         "Select model",
         [
             "meta-llama/llama-3.3-70b-instruct:free",
-            "gpt-4o-mini:free",
             "mistralai/devstral-2512:free",
         ]
     )
