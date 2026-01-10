@@ -51,7 +51,7 @@ with st.sidebar:
         "Select model",
         [
             "meta-llama/llama-3.3-70b-instruct:free",
-            "google/gemini-2.0-flash-exp:free",
+            "gpt-4o-mini:free",
             "mistralai/devstral-2512:free",
         ]
     )
