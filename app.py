@@ -124,7 +124,8 @@ if pdfs:
 
                 with st.spinner(f"Thinking with {model_name}..."):
                     response = chain.invoke({"context": context, "question": question})
-                    st.write(response)
+                
+                st.success(response)
                     
             except Exception as e:
                 st.error(f"API Error: {e}")
