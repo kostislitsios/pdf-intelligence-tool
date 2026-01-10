@@ -60,8 +60,8 @@ with st.sidebar:
         api_key = st.text_input("Mistral API Key", type="password", key="mistral_key")
         base_url = "https://api.mistral.ai/v1"
 
-    st.markdown("---")
-    st.info(f"**Current Limit:** You are using {provider.capitalize()}'s direct free tier.")
+    # st.markdown("---")
+    # st.info(f"**Current Limit:** You are using {provider.capitalize()}'s direct free tier.")
 
 # --------------------------------------------------
 # File Uploader
